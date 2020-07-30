@@ -1,0 +1,30 @@
+service: serverless-lambda-layers
+
+provider:
+  name: aws
+  profile: defautl
+  runtime: python3.6
+  region: ap-northeast-1
+  stage: dev
+
+# AWS Lambda Layers
+layers:
+  requests:
+    path: requests
+    name: ${self:service}-requests
+    compatibleRuntimes:
+      - python3.6
+      - python3.7
+      - python3.8
+    allowedAccounts:
+      - '*'
+
+# AWS Lambda Functions
+functions:
+  test:
+    timeout: 30
+    memorySize: 128
+    handler: handler.main
+    layers:
+      - {Ref: RequestsLambdaLayer}
+#     - arn:aws:lambda:${self:provider.region}:xxxxxxxxxxx:layer:{service名}-{layer名}:{バージョン}
